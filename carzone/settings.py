@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
+import dj_database_url
 from pathlib import Path
 # https://docs.djangoproject.com/en/3.1/ref/contrib/messages/
 from django.contrib.messages import constants as messages
@@ -67,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'carzone.urls'
@@ -96,15 +98,19 @@ WSGI_APPLICATION = 'carzone.wsgi.application'
 # env LDFLAGS="-I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib" pipenv install psycopg2
 # https://adamj.eu/tech/2020/03/16/use-pathlib-in-your-django-project/
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2', # postgresql_psycopg2
+#         'NAME': str('carzone_db'), #db.sqlite3',
+#         'USER': 'postgres',
+#         'PASSWORD': 'POSTGRESS_PASS',
+#         'HOST': 'localhost',
+#         'PORT': "5432",
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # postgresql_psycopg2
-        'NAME': str('carzone_db'), #db.sqlite3',
-        'USER': 'postgres',
-        'PASSWORD': 'POSTGRESS_PASS',
-        'HOST': 'localhost',
-        'PORT': "5432",
-    }
+    'default': dj_database_url.config(default='postgres://postgres:POSTGRESS_PASS@localhost/carzone_db')
 }
 
 
@@ -143,13 +149,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+ 
 STATIC_URL = '/static/'
-# STATIC_ROOT = BASE_DIR / 'static' # for production purposes
-STATICFILES_DIRS = [    # for development purposes 
-    BASE_DIR / "static",
-    # '/var/www/static/',
-]
+STATIC_ROOT = BASE_DIR / 'static' # for production purposes
+# STATICFILES_DIRS = [    # for development purposes 
+#     BASE_DIR / "static",
+#     # '/var/www/static/',
+# ]
 
 # Media settings
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -166,3 +172,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'techamir25@gmail.com'
 EMAIL_HOST_PASSWORD = 'Techamir$1955'
 EMAIL_USE_TLS = True
+
+# whitenoise settings
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticfilesStorage'
