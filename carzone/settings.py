@@ -10,11 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+# https://docs.djangoproject.com/en/3.1/ref/contrib/messages/
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -27,6 +29,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
+LOGIN_REDIRECT_URL = 'dashboard'
 
 # Application definition
 
@@ -37,12 +41,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     # https://docs.djangoproject.com/en/3.1/ref/contrib/humanize/
     'django.contrib.humanize',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # providers
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
     
     'pages',
     'cars',
     'ckeditor',
+    'users',
+    'contacts',
 ]
 
 MIDDLEWARE = [
@@ -131,11 +145,24 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
+# STATIC_ROOT = BASE_DIR / 'static' # for production purposes
+STATICFILES_DIRS = [    # for development purposes 
     BASE_DIR / "static",
-    '/var/www/static/',
+    # '/var/www/static/',
 ]
 
 # Media settings
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
+
+# Sending email to admin 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'techamir25@gmail.com'
+EMAIL_HOST_PASSWORD = 'Techamir$1955'
+EMAIL_USE_TLS = True
