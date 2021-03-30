@@ -8,10 +8,20 @@ def cars(requests):
     paginator = Paginator(car_list, 2)
     page = requests.GET.get('page')
     paged_cars = paginator.get_page(page)
+    model_fields = Car.objects.values_list('model', flat=True).distinct()
+    state_fields = Car.objects.values_list('state', flat=True).distinct()
+    year_fields = Car.objects.values_list('year', flat=True).distinct()
+    transmission_fields = Car.objects.values_list('transmission', flat=True).distinct()
+    make_fields = Car.objects.values_list('make', flat=True).distinct()
 
     data = {
         'car_list': car_list,
         'car_list': paged_cars,
+        'model_fields': model_fields,
+        'state_fields': state_fields,
+        'year_fields': year_fields,
+        'transmission_fields': transmission_fields,
+        'make_fields': make_fields,
     }
     return render(requests, 'cars/cars.html', data)
 
